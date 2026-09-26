@@ -64,7 +64,9 @@ This repository presents a resource-aware Edge AI framework designed for bare-me
                        |       Prediction Output       |
                        |      OLED Display / Serial    |
                        +-------------------------------+
-📐 Mathematical Formulation
+
+----
+## 📐 Mathematical Formulation
 1. Multi-Path Forward Pass
 Given input tensor x 
 t
@@ -204,7 +206,7 @@ free
 otherwise
 ​
  
-📦 Repository Structure
+## 📦 Repository Structure
 Plaintext
 
 
@@ -289,7 +291,7 @@ large
 ​
  	4	179	716 Bytes	65.0μs	0 Bytes
 
-👥 Authors & Affiliations
+## 👥 Authors & Affiliations
 Mirza Mudassar Hussain — Institute of Mathematics, University of the Punjab, Lahore, Pakistan (muddasser.mh@gmail.com)
 
 Muhammad Nasim Aftab — Department of Mathematics, University of Engineering and Technology, Lahore, Pakistan (nasim.aftab@uet.edu.pk)
@@ -298,7 +300,7 @@ Apostolos Xenakis — Department of Digital Systems, University of Thessaly, Lar
 
 George Floros (Corresponding Author) — Department of Electronic and Electrical Engineering, Trinity College Dublin, Ireland (florrosg@tcd.ie)
 
-✍️ Citation
+## ✍️ Citation
 If you use this work, framework, or code in your research, please cite our manuscript:
 
 Code snippet
@@ -310,5 +312,5 @@ Code snippet
   journal={AMS Mathematics/Computer Science Repository},
   year={2026}
 }
-📄 License
+## 📄 License
 This project is licensed under the MIT License — see the LICENSE file for details.
