@@ -73,7 +73,7 @@ Plaintext
 │   └── trace_simulation.png     # Telemetry routing simulation trace
 ├── LICENSE
 └── README.md                    # Project documentation
-🛠️ Hardware Requirements & Setup
+## 🛠️ Hardware Requirements & Setup
 Components
 Microcontroller: ESP32-S3 DevKitC-1 (240 MHz Xtensa LX7, 512 KB SRAM, 8 MB Flash)
 
@@ -88,7 +88,7 @@ SSD1306	SDA	GPIO 21
 SSD1306	SCL	GPIO 22
 Power	VCC / GND	3.3V / GND
 
-🚀 Quick Start Guide
+## 🚀 Quick Start Guide
 1. Model Training & Export (Python)
 To train the multi-path network using PyTorch and generate the static C++ header model_weights.h:
 
@@ -99,45 +99,6 @@ Bash
 git clone [https://github.com/your-username/resource-adaptive-edge-inference.git](https://github.com/your-username/resource-adaptive-edge-inference.git)
 cd resource-adaptive-edge-inference/training
 
-# Install dependencies
-pip install torch numpy matplotlib
-
-# Train the multi-branch model & generate C++ header
-python train_multipath.py --export-path ../firmware/src/model_weights.h
-2. Embedded Firmware Deployment (PlatformIO)
-Install PlatformIO IDE (VS Code extension or CLI).
-
-Connect your ESP32-S3 board via USB.
-
-Build and flash the firmware:
-
-Bash
-
-
-cd ../firmware
-
-# Build project
-pio run
-
-# Flash to ESP32-S3
-pio run --target upload
-
-# Open Serial Monitor for microsecond latency profiling logs
-pio device monitor --baud 115200
-📊 Benchmark Summary
-Path	Layers	Parameters	Flash Size	Microsecond Latency	Dynamic Memory
-P 
-small
-​
- 	2	19	76 Bytes	12.0μs	0 Bytes
-P 
-medium
-​
- 	3	59	236 Bytes	28.0μs	0 Bytes
-P 
-large
-​
- 	4	179	716 Bytes	65.0μs	0 Bytes
 
 ## 👥 Authors & Affiliations
 Mirza Mudassar Hussain — Institute of Mathematics, University of the Punjab, Lahore, Pakistan (muddasser.mh@gmail.com)
