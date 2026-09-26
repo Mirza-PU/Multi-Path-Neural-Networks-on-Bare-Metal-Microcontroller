@@ -30,144 +30,29 @@ This repository presents a resource-aware Edge AI framework designed for bare-me
 
 ----
 ## 📐 Mathematical Formulation
-1. Multi-Path Forward Pass
-Given input tensor x 
-t
-​
- ∈R 
-d
- , the shared feature representation is computed as:
 
-h 
-shared
-​
- =σ(W 
-shared
-​
- x 
-t
-​
- +b 
-shared
-​
- )
+### 1. Multi-Path Forward Pass
+
+Given input tensor $\mathbf{x}_t \in \mathbb{R}^d$, the shared feature representation is computed as:
+
+$$\mathbf{h}_{\text{shared}} = \sigma\left(\mathbf{W}_{\text{shared}} \mathbf{x}_t + \mathbf{b}_{\text{shared}}\right)$$
+
 The dynamic execution branches are defined by:
 
-Small Path (P 
-small
-​
- ): Direct linear transformation
+- **Small Path ($\mathcal{P}_{\text{small}}$):** Direct linear transformation
+  $$\mathcal{P}_{\text{small}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(1)} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{out}}^{(1)}$$
 
-P 
-small
-​
- (x 
-t
-​
- )=W 
-out
-(1)
-​
- h 
-shared
-​
- +b 
-out
-(1)
-​
- 
-Medium Path (P 
-medium
-​
- ): Single hidden layer non-linear network
+- **Medium Path ($\mathcal{P}_{\text{medium}}$):** Single hidden layer non-linear network
+  $$\mathcal{P}_{\text{medium}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(2)} \sigma\left(\mathbf{W}_{\text{mid}} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{mid}}\right) + \mathbf{b}_{\text{out}}^{(2)}$$
 
-P 
-medium
-​
- (x 
-t
-​
- )=W 
-out
-(2)
-​
- σ(W 
-mid
-​
- h 
-shared
-​
- +b 
-mid
-​
- )+b 
-out
-(2)
-​
- 
-Large Path (P 
-large
-​
- ): Dual hidden layer non-linear network
+- **Large Path ($\mathcal{P}_{\text{large}}$):** Dual hidden layer non-linear network
+  $$\mathcal{P}_{\text{large}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(3)} \sigma\left(\mathbf{W}_{\text{l2}} \sigma\left(\mathbf{W}_{\text{l1}} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{l1}}\right) + \mathbf{b}_{\text{l2}}\right) + \mathbf{b}_{\text{out}}^{(3)}$$
 
-P 
-large
-​
- (x 
-t
-​
- )=W 
-out
-(3)
-​
- σ(W 
-l2
-​
- σ(W 
-l1
-​
- h 
-shared
-​
- +b 
-l1
-​
- )+b 
-l2
-​
- )+b 
-out
-(3)
-​
- 
-2. Dual-Trigger Telemetry Gating
-The routing state decision G(t)∈{SMALL,MEDIUM,LARGE} is evaluated deterministically at each step:
+### 2. Dual-Trigger Telemetry Gating
 
-G(t)= 
-⎩
+The routing state decision $\mathcal{G}(t) \in \{\text{SMALL}, \text{MEDIUM}, \text{LARGE}\}$ is evaluated deterministically at each step:
 
-⎨
-
-⎧
-​
-  
-SMALL,
-LARGE,
-MEDIUM,
-​
-  
-if M 
-free
-​
- (t)<150 KB
-if M 
-free
-​
- (t)≥150 KB and ∣ΔT(t)∣>2.0 
-∘
- C
-otherwise
-​
+$$\mathcal{G}(t) = \begin{cases} \text{SMALL}, & \text{if } M_{\text{free}}(t) < 150\text{~KB} \\ \text{LARGE}, & \text{if } M_{\text{free}}(t) \ge 150\text{~KB} \text{ and } |\Delta T(t)| > 2.0^\circ\text{C} \\ \text{MEDIUM}, & \text{otherwise} \end{cases}$$​
  
 ## 📦 Repository Structure
 Plaintext
