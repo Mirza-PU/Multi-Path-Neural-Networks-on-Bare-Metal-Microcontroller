@@ -64,6 +64,7 @@ This repository presents a resource-aware Edge AI framework designed for bare-me
                        |       Prediction Output       |
                        |      OLED Display / Serial    |
                        +-------------------------------+
+
 ---
 
 ## 📐 Mathematical Formulation
