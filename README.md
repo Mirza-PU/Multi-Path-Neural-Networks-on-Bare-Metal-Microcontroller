@@ -64,3 +64,9 @@ This repository presents a resource-aware Edge AI framework designed for bare-me
                        |       Prediction Output       |
                        |      OLED Display / Serial    |
                        +-------------------------------+
+@article{hussain2026resource,
+  title={Resource-Adaptive Edge Inference via Telemetry-Driven Multi-Path Neural Networks on Bare-Metal Microcontrollers},
+  author={Hussain, Mirza Mudassar and Aftab, Muhammad Nasim and Xenakis, Apostolos and Floros, George},
+  journal={AMS Mathematics/Computer Science Repository},
+  year={2026}
+}
