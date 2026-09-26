@@ -28,43 +28,6 @@ This repository presents a resource-aware Edge AI framework designed for bare-me
 
 ## 🏛️ System Architecture
 
-```text
-                       +-------------------------------+
-                       |    Sensor Telemetry Vector    |
-                       |    Input: Temp / Delta Temp   |
-                       +---------------+---------------+
-                                       |
-                                       v
-                       +-------------------------------+
-                       |   Shared Backbone Layer       |
-                       |   h_shared = ReLU(W*x + b)    |
-                       +---------------+---------------+
-                                       |
-                   +-------------------+-------------------+
-                   | Telemetry-Driven Gating Engine        |
-                   | Rules:                                |
-                   |  1. Free RAM < 150 KB  => P_small     |
-                   |  2. |Delta T| > 2.0°C  => P_large     |
-                   |  3. Otherwise          => P_medium    |
-                   +-------------------+-------------------+
-                                       |
-         +-----------------------------+-----------------------------+
-         |                             |                             |
-         v                             v                             v
-+------------------+         +-------------------+         +-------------------+
-|  Path: P_small   |         |   Path: P_medium  |         |   Path: P_large   |
-|  2 Layers        |         |   3 Layers        |         |   4 Layers        |
-|  Latency: 12 us  |         |   Latency: 28 us  |         |   Latency: 65 us  |
-+--------+---------+         +---------+---------+         +---------+---------+
-         |                             |                             |
-         +-----------------------------+-----------------------------+
-                                       |
-                                       v
-                       +-------------------------------+
-                       |       Prediction Output       |
-                       |      OLED Display / Serial    |
-                       +-------------------------------+
-
 ----
 ## 📐 Mathematical Formulation
 1. Multi-Path Forward Pass
