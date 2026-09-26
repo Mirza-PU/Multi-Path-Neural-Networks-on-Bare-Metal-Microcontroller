@@ -40,7 +40,9 @@ $$\mathbf{h}_{\text{shared}} = \sigma\left(\mathbf{W}_{\text{shared}} \mathbf{x}
 The dynamic execution branches are defined by:
 
 - **Small Path ($\mathcal{P}_{\text{small}}$):** Direct linear transformation
-  $$\mathcal{P}_{\text{small}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(1)} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{out}}^{(1)}$$
+  $$
+  \mathcal{P}_{\text{small}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(1)} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{out}}^{(1)}
+  $$
 
 - **Medium Path ($\mathcal{P}_{\text{medium}}$):** Single hidden layer non-linear network
   $$\mathcal{P}_{\text{medium}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(2)} \sigma\left(\mathbf{W}_{\text{mid}} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{mid}}\right) + \mathbf{b}_{\text{out}}^{(2)}$$
