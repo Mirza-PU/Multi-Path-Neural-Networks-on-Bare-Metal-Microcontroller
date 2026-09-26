@@ -64,33 +64,150 @@ This repository presents a resource-aware Edge AI framework designed for bare-me
                        |       Prediction Output       |
                        |      OLED Display / Serial    |
                        +-------------------------------+
+📐 Mathematical Formulation
+1. Multi-Path Forward Pass
+Given input tensor x 
+t
+​
+ ∈R 
+d
+ , the shared feature representation is computed as:
 
----
-
-## 📐 Mathematical Formulation
-
-### 1. Multi-Path Forward Pass
-Given input tensor $\mathbf{x}_t \in \mathbb{R}^d$, the shared feature representation is computed as:
-$$\mathbf{h}_{\text{shared}} = \sigma\left(\mathbf{W}_{\text{shared}} \mathbf{x}_t + \mathbf{b}_{\text{shared}}\right)$$
-
+h 
+shared
+​
+ =σ(W 
+shared
+​
+ x 
+t
+​
+ +b 
+shared
+​
+ )
 The dynamic execution branches are defined by:
-- **Small Path ($\mathcal{P}_{\text{small}}$):** Direct linear transformation
-  $$\mathcal{P}_{\text{small}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(1)} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{out}}^{(1)}$$
-- **Medium Path ($\mathcal{P}_{\text{medium}}$):** Single hidden layer non-linear network
-  $$\mathcal{P}_{\text{medium}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(2)} \sigma\left(\mathbf{W}_{\text{mid}} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{mid}}\right) + \mathbf{b}_{\text{out}}^{(2)}$$
-- **Large Path ($\mathcal{P}_{\text{large}}$):** Dual hidden layer non-linear network
-  $$\mathcal{P}_{\text{large}}(\mathbf{x}_t) = \mathbf{W}_{\text{out}}^{(3)} \sigma\left(\mathbf{W}_{\text{l2}} \sigma\left(\mathbf{W}_{\text{l1}} \mathbf{h}_{\text{shared}} + \mathbf{b}_{\text{l1}}\right) + \mathbf{b}_{\text{l2}}\right) + \mathbf{b}_{\text{out}}^{(3)}$$
 
-### 2. Dual-Trigger Telemetry Gating
-The routing state decision $\mathcal{G}(t) \in \{\text{SMALL}, \text{MEDIUM}, \text{LARGE}\}$ is evaluated deterministically at each step:
+Small Path (P 
+small
+​
+ ): Direct linear transformation
 
-$$\mathcal{G}(t) = \begin{cases} \text{SMALL}, & \text{if } M_{\text{free}}(t) < 150\text{~KB} \\ \text{LARGE}, & \text{if } M_{\text{free}}(t) \ge 150\text{~KB} \text{ and } \vert{}\Delta T(t)\vert{} > 2.0^\circ\text{C} \\ \text{MEDIUM}, & \text{otherwise} \end{cases}$$
+P 
+small
+​
+ (x 
+t
+​
+ )=W 
+out
+(1)
+​
+ h 
+shared
+​
+ +b 
+out
+(1)
+​
+ 
+Medium Path (P 
+medium
+​
+ ): Single hidden layer non-linear network
 
----
+P 
+medium
+​
+ (x 
+t
+​
+ )=W 
+out
+(2)
+​
+ σ(W 
+mid
+​
+ h 
+shared
+​
+ +b 
+mid
+​
+ )+b 
+out
+(2)
+​
+ 
+Large Path (P 
+large
+​
+ ): Dual hidden layer non-linear network
 
-## 📦 Repository Structure
+P 
+large
+​
+ (x 
+t
+​
+ )=W 
+out
+(3)
+​
+ σ(W 
+l2
+​
+ σ(W 
+l1
+​
+ h 
+shared
+​
+ +b 
+l1
+​
+ )+b 
+l2
+​
+ )+b 
+out
+(3)
+​
+ 
+2. Dual-Trigger Telemetry Gating
+The routing state decision G(t)∈{SMALL,MEDIUM,LARGE} is evaluated deterministically at each step:
 
-```text
+G(t)= 
+⎩
+
+⎨
+
+⎧
+​
+  
+SMALL,
+LARGE,
+MEDIUM,
+​
+  
+if M 
+free
+​
+ (t)<150 KB
+if M 
+free
+​
+ (t)≥150 KB and ∣ΔT(t)∣>2.0 
+∘
+ C
+otherwise
+​
+ 
+📦 Repository Structure
+Plaintext
+
+
 .
 ├── firmware/
 │   ├── src/
@@ -106,3 +223,92 @@ $$\mathcal{G}(t) = \begin{cases} \text{SMALL}, & \text{if } M_{\text{free}}(t) <
 │   └── trace_simulation.png     # Telemetry routing simulation trace
 ├── LICENSE
 └── README.md                    # Project documentation
+🛠️ Hardware Requirements & Setup
+Components
+Microcontroller: ESP32-S3 DevKitC-1 (240 MHz Xtensa LX7, 512 KB SRAM, 8 MB Flash)
+
+Sensor: DHT22 Digital Temperature & Humidity Sensor
+
+Display: 0.96" SSD1306 OLED Display (128×64, I2C interface)
+
+Pin Mapping
+Component	Pin Function	ESP32-S3 GPIO
+DHT22	Data Line	GPIO 18
+SSD1306	SDA	GPIO 21
+SSD1306	SCL	GPIO 22
+Power	VCC / GND	3.3V / GND
+
+🚀 Quick Start Guide
+1. Model Training & Export (Python)
+To train the multi-path network using PyTorch and generate the static C++ header model_weights.h:
+
+Bash
+
+
+# Clone repository
+git clone [https://github.com/your-username/resource-adaptive-edge-inference.git](https://github.com/your-username/resource-adaptive-edge-inference.git)
+cd resource-adaptive-edge-inference/training
+
+# Install dependencies
+pip install torch numpy matplotlib
+
+# Train the multi-branch model & generate C++ header
+python train_multipath.py --export-path ../firmware/src/model_weights.h
+2. Embedded Firmware Deployment (PlatformIO)
+Install PlatformIO IDE (VS Code extension or CLI).
+
+Connect your ESP32-S3 board via USB.
+
+Build and flash the firmware:
+
+Bash
+
+
+cd ../firmware
+
+# Build project
+pio run
+
+# Flash to ESP32-S3
+pio run --target upload
+
+# Open Serial Monitor for microsecond latency profiling logs
+pio device monitor --baud 115200
+📊 Benchmark Summary
+Path	Layers	Parameters	Flash Size	Microsecond Latency	Dynamic Memory
+P 
+small
+​
+ 	2	19	76 Bytes	12.0μs	0 Bytes
+P 
+medium
+​
+ 	3	59	236 Bytes	28.0μs	0 Bytes
+P 
+large
+​
+ 	4	179	716 Bytes	65.0μs	0 Bytes
+
+👥 Authors & Affiliations
+Mirza Mudassar Hussain — Institute of Mathematics, University of the Punjab, Lahore, Pakistan (muddasser.mh@gmail.com)
+
+Muhammad Nasim Aftab — Department of Mathematics, University of Engineering and Technology, Lahore, Pakistan (nasim.aftab@uet.edu.pk)
+
+Apostolos Xenakis — Department of Digital Systems, University of Thessaly, Larissa, Greece (axenakis@uth.gr)
+
+George Floros (Corresponding Author) — Department of Electronic and Electrical Engineering, Trinity College Dublin, Ireland (florrosg@tcd.ie)
+
+✍️ Citation
+If you use this work, framework, or code in your research, please cite our manuscript:
+
+Code snippet
+
+
+@article{hussain2026resource,
+  title={Resource-Adaptive Edge Inference via Telemetry-Driven Multi-Path Neural Networks on Bare-Metal Microcontrollers},
+  author={Hussain, Mirza Mudassar and Aftab, Muhammad Nasim and Xenakis, Apostolos and Floros, George},
+  journal={AMS Mathematics/Computer Science Repository},
+  year={2026}
+}
+📄 License
+This project is licensed under the MIT License — see the LICENSE file for details.
